@@ -1,3 +1,7 @@
+ratio_count <- function(x){
+  sum(is.na(x))/length(x)
+}
+
 single_sample_imp_validation <- function(x,pre,imp){
   #x <- sample_names[2]
   pre_da <- t(pre[x,-c(1,2,3,4,5)])
