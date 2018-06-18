@@ -24,7 +24,7 @@ library(impute)
 source(file.path("tools", "tools.R"),  local = TRUE)
 
 ui <- navbarPage(
-  title = "SIM: Smart missing data Imputation for untargeted Metabolomics data",
+  title = "SIM: Simple Imputation for untargeted Metabolomics data",
   # include the UI for each tab
   source(file.path("ui", "Ututorial.R"),  local = TRUE)$value,
   source(file.path("ui", "UuploadVisiualization.R"),  local = TRUE)$value,

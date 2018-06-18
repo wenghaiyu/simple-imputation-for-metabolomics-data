@@ -21,7 +21,7 @@ tabPanel("Upload and Visiualization", fluid = TRUE,
            ),
            hr(),
              fluidRow(
-                    h2("Data visiualization results:"),
+                    h2("Visualization of the missing pattern:"),
                     p("Data visiualization would give you answers to the following question:"),
                     p("1.how much missing data you have is it low or high?"),
                     p("2.the missing data distribution pattern,do they have some regular patterns?"),
