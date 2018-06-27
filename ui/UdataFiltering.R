@@ -2,8 +2,8 @@ tabPanel("Filtering", fluid = TRUE,
          fluidPage(theme = shinytheme("cerulean"),
          fluidRow(
            h2("Usage:"),
-           p("In this step, we will filter the features that contain too much missing value.
-              Two kinds of methods are avaibale, namely group based filtering and traditional filtering."),
+           p("In this step, we will remove the features containing large porportion of missing value.
+              Two kinds of methods are avaibale: group based filtering and traditional filtering."),
            h2("group based filtering"),
            p("Please set the minimum missing ratio for the QC and study samples. 
               Features from QC sampples that have a higher missing ratio than the threshould will be removed.
@@ -42,17 +42,17 @@ tabPanel("Filtering", fluid = TRUE,
            textOutput("removednot"),
            hr(),
            h2("Difference between the two filtering strategies:"),
-           p("To compare the two filtering methods, you can check the different filtered features to figure out which method is more realiable"),
+           p("Overlap of the two filtering results, you can check the different filtered features to figure out which method is more realiable"),
            column(4,
                   h4("difference between the two filtering strategies:"),
                   plotOutput("venndiff")
            ),
            column(4,
-                  h4("features that are filtered by traditional method but kept by group based method"),
+                  h4("features that are removed by traditional method but kept by group based method"),
                   plotOutput("ingroup_out_traditional")
            ),
            column(4,
-                  h4("features that are filtered by group based method but kept by traditional method"),
+                  h4("features that are removed by group based method but kept by traditional method"),
                   plotOutput("intradition_out_group")
                   ),
            hr(),

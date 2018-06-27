@@ -29,8 +29,9 @@ tabPanel("Tutorial", fluid = TRUE,
                      p("sample refers to sample name; batch refers to the batch information; class refers to the biological group, the QC group must be named as \"QC\", as shown in our example data; order refers to the injetion order."),
                      h5("Peak table"),
                      p("The peak table is a csv file containing the peak intensity, the first columns must be mz and RT, the rest columns are sample names. Each row represents a mz"),
-                     p("The sample names in the peak table must be the same with sample names in the sample list file.")
-                     
+                     p("The sample names in the peak table must be the same with sample names in the sample list file."),
+                     h2("Contact Us"),
+                     p("If you have any questions, suggestions or remarks, please contact meizhanlong@genomics.cn. You can also visti our SIM github page and build a local version on your own computer. https://github.com/zhanlongmei/simple-imputation-for-metabolomics-data.")
                    )
          )
 )
