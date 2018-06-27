@@ -86,7 +86,7 @@ output$venndiff <- renderPlot({
 
 output$ingroup_out_traditional <- renderPlot({
   list <- listData()
-  list <- list[(list$class != "QC"),]
+  #list <- list[(list$class != "QC"),]
   list <- list[order(list$class),]
   group_filtered_data <- groupfilterdata()    #group_filtered_data[c(1:5),c(1:10)]
   traditional_filtered_data <- traditionaldata()     #traditional_filtered_data[c(1:5),c(1:10)]
@@ -110,7 +110,7 @@ output$ingroup_out_traditional <- renderPlot({
 
 output$intradition_out_group <- renderPlot({
   list <- listData()
-  list <- list[(list$class != "QC"),]
+  #list <- list[(list$class != "QC"),]
   list <- list[order(list$class),]
   group_filtered_data <- groupfilterdata()    #group_filtered_data[c(1:5),c(1:10)]
   traditional_filtered_data <- traditionaldata()     #traditional_filtered_data[c(1:5),c(1:10)]

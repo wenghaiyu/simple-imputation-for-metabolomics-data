@@ -1,5 +1,18 @@
+
+
 ratio_count <- function(x){
   sum(is.na(x))/length(x)
+}
+
+rnorm_fixed = function( n,mu, sigma) {
+  #mu <- mean_l
+  #sigma <- sd_l
+  #n <- 20
+  x = rnorm(n)  # from standard normal distribution
+  x = sigma * x / sd(x)  # scale to desired SD
+  x = x - mean(x) + mu  # center around desired mean
+  x[which(x<0)] <- abs(x[which(x<0)])
+  return(x)
 }
 
 single_sample_imp_validation <- function(x,pre,imp){
