@@ -1,7 +1,5 @@
 knnimpute <- eventReactive(input$knn, {
   data <- minimunImputed()[,-c(1,2,3,4,5)]
-  #all_value <- as.numeric(as.matrix(data))
-  #low_value <- quantile(all_value,0.01,na.rm = T)
   data2 <- impute.knn(as.matrix(data))
   data3 <- data2$data
   data3[data3<0] <- 0.01
@@ -11,8 +9,6 @@ knnimpute <- eventReactive(input$knn, {
 
 missforestimpute <- eventReactive(input$missforest, {
   data <- minimunImputed()[,-c(1,2,3,4,5)]
-  #all_value <- as.numeric(as.matrix(data))
-  #low_value <- quantile(all_value,0.01,na.rm = T)
   data2 <- missForest(data)$ximp
   data2[data2<0] <- 0.01
   data <- cbind(minimunImputed()[,c(1,2,3,4,5)],data2)
@@ -21,8 +17,6 @@ missforestimpute <- eventReactive(input$missforest, {
 
 bpcaimpute <- eventReactive(input$bpca, {
   data <- minimunImputed()[,-c(1,2,3,4,5)]
-  #all_value <- as.numeric(as.matrix(data))
-  #low_value <- quantile(all_value,0.01,na.rm = T)
   row.names(data) <- minimunImputed()$sample
   data2 <- t(data)
   pc <- pca(data2,nPcs=2,method="bpca")
@@ -34,8 +28,6 @@ bpcaimpute <- eventReactive(input$bpca, {
 
 ppcaimpute <- eventReactive(input$ppca, {
   data <- minimunImputed()[,-c(1,2,3,4,5)]
-  #all_value <- as.numeric(as.matrix(data))
-  #low_value <- quantile(all_value,0.01,na.rm = T)
   row.names(data) <- minimunImputed()$sample
   data2 <- t(data)
   pc <- pca(data2,nPcs=2,method="ppca")
@@ -47,8 +39,6 @@ ppcaimpute <- eventReactive(input$ppca, {
 
 svdimpute <- eventReactive(input$svd, {
   data <- minimunImputed()[,-c(1,2,3,4,5)]
-  #all_value <- as.numeric(as.matrix(data))
-  #low_value <- quantile(all_value,0.01,na.rm = T)
   row.names(data) <- minimunImputed()$sample
   data2 <- t(data)
   pc <- pca(data2,nPcs=2,method="svdImpute")
@@ -57,16 +47,15 @@ svdimpute <- eventReactive(input$svd, {
   data <- cbind(minimunImputed()[,c(1,2,3,4,5)],as.data.frame(t(imputed)))
   return(data)
 })
-#multiimpute <- eventReactive(input$multi, {
-#  data <- minimunImputed()[,-c(1,2,3,4,5)]
-#  all_value <- as.numeric(as.matrix(data))
-#  low_value <- quantile(all_value,0.01,na.rm = T)
-#  imp <- mice(data)
-#  fit <- with(imp)
-#  com <- pool(fit)
-  #com[com<0] <- low_value
-#  return(com)
-#})
+llsimpute <- eventReactive(input$lls, {
+  data <- minimunImputed()[,-c(1,2,3,4,5)]
+  data1 <- t(data)
+  result <- llsImpute(data1, k = 10, correlation="pearson", allVariables=TRUE)
+  imputed <- completeObs(result)
+  imputed[imputed<0] <- 0.01
+  data2 <- cbind(minimunImputed()[,c(1,2,3,4,5)],as.data.frame(t(imputed)))
+  return(data2)
+})
 
 
 output$downloadknnData <- downloadHandler(
@@ -98,7 +87,7 @@ output$downloadmfData <- downloadHandler(
 
 output$downloadppcaData <- downloadHandler(
   filename = function() {
-    paste("data-bpcaImputed", Sys.Date(), ".csv", sep="")
+    paste("data-ppcaImputed", Sys.Date(), ".csv", sep="")
   },
   content = function(file) {
     write.csv(ppcaimpute(), file)
@@ -107,20 +96,20 @@ output$downloadppcaData <- downloadHandler(
 
 output$downloadsvdData <- downloadHandler(
   filename = function() {
-    paste("data-bpcaImputed", Sys.Date(), ".csv", sep="")
+    paste("data-svdImputed", Sys.Date(), ".csv", sep="")
   },
   content = function(file) {
     write.csv(svdimpute(), file)
   }
 )
-#output$downloadmultiData <- downloadHandler(
- # filename = function() {
-#    paste("data-multi_imputed", Sys.Date(), ".csv", sep="")
-#  },
-#  content = function(file) {
-#    write.csv(multiimpute(), file)
-#  }
-#)
+output$downloadllsData <- downloadHandler(
+  filename = function() {
+    paste("data-lls_imputed", Sys.Date(), ".csv", sep="")
+  },
+  content = function(file) {
+    write.csv(llsimpute(), file)
+  }
+)
 
 output$knnvalidateall <- renderPlot({
   pred <- mergedf()
@@ -226,24 +215,24 @@ output$svdvalidatesample <- renderPlot({
   svdsamp <- sample_wise_imputation_validation(pred,impd)
   print(svdsamp)
 })
-#output$multivalidateall <- renderPlot({
-#  pred <- mergedf()
-#  impd <- multiimpute()
-#  multitotal <- total_imp_pre_compare(pred,impd)
-#  print(multitotal)
-#})
+output$llsvalidateall <- renderPlot({
+  pred <- mergedf()
+  impd <- llsimpute()
+  llstotal <- total_imp_pre_compare(pred,impd)
+  print(llstotal)
+})
 
-#output$multivalidatemz <- renderPlot({
- # pred <- mergedf()
-#  impd <- multiimpute()
-#  multimz <- mz_wise_imputation_validataion(pred,impd)
-#  print(multimz)
-#})
+output$llsvalidatemz <- renderPlot({
+  pred <- mergedf()
+  impd <- llsimpute()
+  llsmz <- mz_wise_imputation_validataion(pred,impd)
+  print(llsmz)
+})
 
-#output$multivalidatesample <- renderPlot({
-#  pred <- mergedf()
-#  impd <- multiimpute()
-#  multisamp <- sample_wise_imputation_validation(pred,impd)
-#  print(multisamp)
-#})
+output$llsvalidatesample <- renderPlot({
+  pred <- mergedf()
+  impd <- llsimpute()
+  llssamp <- sample_wise_imputation_validation(pred,impd)
+  print(llssamp)
+})
 

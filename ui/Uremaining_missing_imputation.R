@@ -76,20 +76,20 @@ tabPanel("Imputation", fluid = TRUE,
                               plotOutput("knnvalidatesample")
                               )
                      ),
-                     #conditionalPanel(
-                    #   condition = "input.multi == 1",
-                    #   h2("Results of multi imputation imputation"),
-                    #   column(4,
-                    #          plotOutput("multivalidateall")
-                    #          
-                    #   ),
-                     #  column(4,
-                    #          plotOutput("multivalidatemz")
-                    #   ),
-                    #   column(4,
-                    #          plotOutput("multivalidatesample")
-                    #   )
-                    # ),
+                     conditionalPanel(
+                       condition = "input.lls == 1",
+                       h4("Results of lls imputation imputation"),
+                       column(4,
+                              plotOutput("llsvalidateall")
+                              
+                       ),
+                       column(4,
+                              plotOutput("llsvalidatemz")
+                       ),
+                       column(4,
+                              plotOutput("llsvalidatesample")
+                       )
+                     ),
                      conditionalPanel(
                        condition = "input.bpca == 1",
                        hr(),
