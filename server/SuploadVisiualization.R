@@ -8,7 +8,8 @@ peakData <- reactive({
   inFile1 <- input$peakfile
   if (is.null(inFile1))
     return(NULL)
-  read_csv(inFile1$datapath,n_max = 500)
+  read_csv(inFile1$datapath)
+  #read_csv(inFile1$datapath,n_max = 500)
 })
 
 listData<- reactive({

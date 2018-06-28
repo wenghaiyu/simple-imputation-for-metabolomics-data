@@ -1,4 +1,4 @@
-tabPanel("Imputation Evaluation", fluid = TRUE,
+tabPanel("Imputation evaluation", fluid = TRUE,
          fluidPage(theme = shinytheme("cerulean"),
                    fluidRow(
                      h2("Usage"),

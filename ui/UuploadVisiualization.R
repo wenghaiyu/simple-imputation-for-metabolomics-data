@@ -1,4 +1,4 @@
-tabPanel("Upload and Visiualization", fluid = TRUE,
+tabPanel("Data upload and visiualization", fluid = TRUE,
          fluidPage(theme = shinytheme("cerulean"),
            fluidRow(
              h2("File upload"),
