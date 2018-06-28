@@ -91,6 +91,38 @@ output$imp2cluster <- renderPlot({
   clu_plot(data,titles2)
 })
 
+output$imp1acuarcy <- renderText({
+  validate(
+    need(input$impmethodsel != "", "Please choose two imputed results")
+  )
+  m <- input$impmethodsel
+  titles1 <- m[1]
+  data <- switch (titles1,
+                  kNN = knnimpute(),bpca = bpcaimpute(),missforest = missforestimpute(),ppca=ppcaimpute(),lls=llsimpute(),svd=svdImpute()
+  )
+  validate(
+    need(nrow(data) > 1, "Please choose a method that has been applied to your data")
+  )
+  ac <- pca_lda_classification_accuracy_cal(data)
+  paste("the prediction accuarcy of ",titles1,"is: ",ac,"; ",sep = "")
+})
+
+output$imp2acuarcy <- renderText({
+  validate(
+    need(input$impmethodsel[2] != "", "Please choose two imputed results")
+  )
+  m <- input$impmethodsel
+  titles2 <- m[2]
+  data <- switch (titles2,
+                  kNN = knnimpute(),bpca = bpcaimpute(),missforest = missforestimpute(),ppca=ppcaimpute(),lls=llsimpute(),svd=svdImpute()
+  )
+  validate(
+    need(nrow(data) > 1, "Please choose a method that has been applied to your data")
+  )
+  ac <- pca_lda_classification_accuracy_cal(data)
+  paste("the prediction accuarcy of ",titles2," is: ",ac,"; ",sep = "")
+})
+
 output$venndiffmz <- renderPlot({
   validate(
     need(length(input$impmethodsel)==2, "Please choose two imputed results")

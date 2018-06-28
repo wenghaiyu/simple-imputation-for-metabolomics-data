@@ -203,11 +203,11 @@ two_imp_diff_express_comparsion_in1_out2 <- function(peaks,data1,data2,name1,nam
   #in method 1 not in method 2
   if(direction == 1){
     in_method_1_out_method_2 <- setdiff(sig_mz_1,sig_mz_2)
-    titleso<- paste("Different express features identified in ",name1,"imputed dataset but not in ", name2,"imputed dataset",sep = "")
+    titleso<- paste("Different express features identified in ",name1," imputed dataset but not in ", name2," imputed dataset",sep = "")
   }
   if(direction == 2){
     in_method_1_out_method_2 <- setdiff(sig_mz_2,sig_mz_1)
-    titleso<- paste("Different express features identified in ",name2,"imputed dataset but not in ", name1,"imputed dataset",sep = "")
+    titleso<- paste("Different express features identified in ",name2," imputed dataset but not in ", name1," imputed dataset",sep = "")
   }
   #print(titleso)
   #print(in_method_1_out_method_2)
@@ -271,6 +271,31 @@ clu_plot <- function(impd,n){
 
 }
 
+
+pca_lda_classification_accuracy_cal <- function(data){
+  #get the data
+  impdata <- as.matrix(data[,-c(1,2,3,4,5)])
+  row.names(impdata) <- data$sample
+  diagnosis <- as.numeric(as.factor(data$class))
+  #pca analysis
+  imp.pr <- prcomp(impdata, scale = TRUE, center = TRUE)
+  imp.pcs <- imp.pr$x[,1:10]
+  imp.pcst <- cbind(imp.pcs, diagnosis)
+  #train and test dataset
+  N <- nrow(imp.pcst)
+  rvec <- runif(N)
+  imp.pcst.train <- imp.pcst[rvec < 0.75,]
+  imp.pcst.test <- imp.pcst[rvec >= 0.75,]
+  nrow(imp.pcst.test)
+  #lda analysis
+  imp.pcst.train.df <- as.data.frame(imp.pcst.train)
+  imp.lda <- lda(diagnosis ~ PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10, data = imp.pcst.train.df)
+  imp.pcst.test.df <- as.data.frame(imp.pcst.test)
+  imp.lda.predict <- predict(imp.lda, newdata = imp.pcst.test.df)
+  pred <- cbind(imp.pcst.test.df,imp.lda.predict$class)
+  accuracy <- sum(pred$diagnosis == pred$`imp.lda.predict$class`)/nrow(pred)
+  return(accuracy)
+}
 
 
 
