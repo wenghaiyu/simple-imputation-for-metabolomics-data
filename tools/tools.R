@@ -209,12 +209,16 @@ two_imp_diff_express_comparsion_in1_out2 <- function(peaks,data1,data2,name1,nam
     in_method_1_out_method_2 <- setdiff(sig_mz_2,sig_mz_1)
     titleso<- paste("Different express features identified in ",name2,"imputed dataset but not in ", name1,"imputed dataset",sep = "")
   }
-  
+  #print(titleso)
+  #print(in_method_1_out_method_2)
+  validate(
+    need(length(in_method_1_out_method_2)>0, "No features found!")
+  )
   if(length(in_method_1_out_method_2)>0){
     col_x <- c(3,which(names(peaks) %in% in_method_1_out_method_2))
   }
   if(length(col_x)>11){
-    col_x <- col_x[c(1:11)]
+    col_x <- col_x[c(1:10)]
   }
   row_x <- which((peaks$class==g1)|(peaks$class==g2))
   ori_da <- peaks[row_x,col_x]
@@ -242,6 +246,29 @@ two_imp_diff_express_comparsion_in1_out2 <- function(peaks,data1,data2,name1,nam
   ggplot(dd,aes(class,log2(intensity),colour=mark))+geom_point()+facet_grid(method ~ mz)+
     labs(title=titleso)
   
+}
+
+clu_plot <- function(impd,n){
+  #x <- missforest_imp
+  #impd <- x@imputed_dataset
+  row.names(impd) <- impd$sample
+  imp.hc <- hclust(dist(scale(as.matrix(impd[,-c(1:5)]))))
+  
+  ord <- imp.hc$labels[imp.hc$order]
+  clust_order <- impd[,c(1,3)]
+  clust_order$nu <- factor(impd$class, levels = unique(impd$class), labels = c(1:length(unique(impd$class))))
+  ords <- sapply(ord,function(x){which(clust_order$sample %in% x)})
+  clust_order <- clust_order[ords,]
+  fviz_dend(imp.hc, 
+            #k = length(unique(impd$class)),
+            cex = 0.5, 
+            main = n,
+            #k_colors = rainbow(length(unique(impd$class))),
+            #color_labels_by_k = TRUE, 
+            label_cols=clust_order$nu
+            #rect = TRUE
+  )
+
 }
 
 

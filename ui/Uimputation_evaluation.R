@@ -14,7 +14,7 @@ tabPanel("Imputation Evaluation", fluid = TRUE,
                      selectizeInput(# Replace with what you want to have in sidebarPanel
                        'inputId' = "impmethodsel"
                        , 'label' = "Please select two imputation methods:"
-                       , 'choices' = c("kNN","bpca","missforest","ppca","svd","LLS")
+                       , 'choices' = c("kNN","bpca","missforest","ppca","svd","lls")
                        , 'selected' = ""  # pick first column in dataset as names
                        , multiple = TRUE
                        , options = list(maxItems = 2)
@@ -35,10 +35,10 @@ tabPanel("Imputation Evaluation", fluid = TRUE,
                      ),
                      h4("Results of clustering analysis"),
                      column(6,
-                            plotOutput("impu1clsutering")
+                            plotOutput("imp1cluster")
                      ),
                      column(6,
-                            plotOutput("impu2clsutering")
+                            plotOutput("imp2cluster")
                      ),
                      hr(),
                      h2("Comparision based on supervised classification accuarcy"),

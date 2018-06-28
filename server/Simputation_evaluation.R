@@ -32,25 +32,72 @@ output$originPCA <- renderPlot({
 
 
 output$imp1PCA <- renderPlot({
+  validate(
+    need(input$impmethodsel != "", "Please choose two imputed results")
+  )
   m <- input$impmethodsel
   titles1 <- m[1]
   data <- switch (titles1,
-                  kNN = knnimpute(),bpca = bpcaimpute(),missforest = missforestimpute()
+                  kNN = knnimpute(),bpca = bpcaimpute(),missforest = missforestimpute(),ppca=ppcaimpute(),lls=llsimpute(),svd=svdImpute()
+  )
+  validate(
+    need(nrow(data) > 1, "Please choose a method that has been applied to your data")
   )
   pca_plot(data,titles1)
 })
 
 output$imp2PCA <- renderPlot({
+  validate(
+    need(input$impmethodsel[2] != "", "Please choose two imputed results")
+  )
   m <- input$impmethodsel
   titles2 <- m[2]
   data <- switch (titles2,
-                  kNN = knnimpute(),bpca = bpcaimpute(),missforest = missforestimpute()
+                  kNN = knnimpute(),bpca = bpcaimpute(),missforest = missforestimpute(),ppca=ppcaimpute(),lls=llsimpute(),svd=svdImpute()
+  )
+  validate(
+    need(nrow(data) > 1, "Please choose a method that has been applied to your data")
   )
   pca_plot(data,titles2)
 })
 
+output$imp1cluster <- renderPlot({
+  validate(
+    need(input$impmethodsel != "", "Please choose two imputed results")
+  )
+  m <- input$impmethodsel
+  titles1 <- m[1]
+  data <- switch (titles1,
+                  kNN = knnimpute(),bpca = bpcaimpute(),missforest = missforestimpute(),ppca=ppcaimpute(),lls=llsimpute(),svd=svdImpute()
+  )
+  validate(
+    need(nrow(data) > 1, "Please choose a method that has been applied to your data")
+  )
+  clu_plot(data,titles1)
+})
+
+output$imp2cluster <- renderPlot({
+  validate(
+    need(input$impmethodsel[2] != "", "Please choose two imputed results")
+  )
+  m <- input$impmethodsel
+  titles2 <- m[2]
+  data <- switch (titles2,
+                  kNN = knnimpute(),bpca = bpcaimpute(),missforest = missforestimpute(),ppca=ppcaimpute(),lls=llsimpute(),svd=svdImpute()
+  )
+  validate(
+    need(nrow(data) > 1, "Please choose a method that has been applied to your data")
+  )
+  clu_plot(data,titles2)
+})
 
 output$venndiffmz <- renderPlot({
+  validate(
+    need(length(input$impmethodsel)==2, "Please choose two imputed results")
+  )
+  validate(
+    need(length(input$classsel)==2, "Please choose two biological groups")
+  )
   m <- input$impmethodsel
   titles1 <- m[1]
   titles2 <- m[2]
@@ -90,8 +137,13 @@ output$venndiffmz <- renderPlot({
 })
 
 
-
 output$in1out2 <- renderPlot({
+  validate(
+    need(length(input$impmethodsel)==2, "Please choose two imputed results")
+  )
+  validate(
+    need(length(input$classsel)==2, "Please choose two biological groups")
+  )
   namem <- input$impmethodsel
   name1 <- namem[1]
   name2 <- namem[2]
@@ -100,12 +152,17 @@ output$in1out2 <- renderPlot({
   g2 <- g[2]
   data1 <- switch(EXPR = name1, kNN = knnimpute(), bpca = bpcaimpute(), missforest = missforestimpute())
   data2 <- switch(EXPR = name2, kNN = knnimpute(), bpca = bpcaimpute(), missforest = missforestimpute())
-  
-  peaks <- mergedf()
+  peaks <- minimunImputed()
   two_imp_diff_express_comparsion_in1_out2(peaks,data1,data2,name1,name2,g1,g2,1)
 })
 
 output$in2out1 <- renderPlot({
+  validate(
+    need(length(input$impmethodsel)==2, "Please choose two imputed results")
+  )
+  validate(
+    need(length(input$classsel)==2, "Please choose two biological groups")
+  )
   namem <- input$impmethodsel
   name1 <- namem[1]
   name2 <- namem[2]
@@ -114,7 +171,9 @@ output$in2out1 <- renderPlot({
   g2 <- g[2]
   data1 <- switch(EXPR = name1, kNN = knnimpute(), bpca = bpcaimpute(), missforest = missforestimpute())
   data2 <- switch(EXPR = name2, kNN = knnimpute(), bpca = bpcaimpute(), missforest = missforestimpute())
-  
   peaks <- mergedf()
   two_imp_diff_express_comparsion_in1_out2(peaks,data1,data2,name1,name2,g1,g2,2)
 })
+
+
+

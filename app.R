@@ -21,6 +21,8 @@ library(missForest)
 library(MASS)
 library(impute)
 library(BaylorEdPsych)
+library(cluster)
+library(factoextra)
 
 source(file.path("tools", "tools.R"),  local = TRUE)
 
